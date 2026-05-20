@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+
+# Temporary files
+tmp/
+temp/
+.cache/
+
+# Environment
+.env
+.env.local
