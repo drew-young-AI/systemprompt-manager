@@ -12,6 +12,6 @@ description: 管理與同步 Gemini, Copilot CLI 的系統提示詞 (System Prom
 1. 修改 `skills/systemprompt.md` 以更新您的統一指令。
 2. 執行同步腳本：
    ```bash
-   /Users/drew/Project/systemprompt-manager/scripts/update-systemprompt.sh
+   bash systemprompt-manager/scripts/update-systemprompt.sh
    ```
 3. 執行後，您的所有 CLI 工具將立即採用最新的「統一憲法」。

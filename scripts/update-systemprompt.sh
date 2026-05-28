@@ -2,7 +2,9 @@
 # Multi-CLI System Prompt Synchronizer (Merge Mode)
 # Supports: Gemini, Copilot, Claude Code, and Generic Agents
 
-SOURCE_FILE="/Users/drew/Project/systemprompt-manager/skills/systemprompt.md"
+# Determine Script Directory
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+SOURCE_FILE="$SCRIPT_DIR/../skills/systemprompt.md"
 START_MARKER="### UNIVERSAL_PRINCIPLES_START ###"
 END_MARKER="### UNIVERSAL_PRINCIPLES_END ###"
 
