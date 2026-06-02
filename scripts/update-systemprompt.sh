@@ -1,61 +1,56 @@
 #!/bin/bash
-# Multi-CLI System Prompt Synchronizer (Merge Mode)
-# Supports: Gemini, Copilot, Claude Code, and Generic Agents
+# Universal System Prompt Update Script v2.0
+# Syncs system prompt to ALL 7 AI tools
+# Source: https://github.com/drew-young-AI/systemprompt-manager
 
-# Determine Script Directory
-SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-SOURCE_FILE="$SCRIPT_DIR/../skills/systemprompt.md"
-START_MARKER="### UNIVERSAL_PRINCIPLES_START ###"
-END_MARKER="### UNIVERSAL_PRINCIPLES_END ###"
+SOURCE_FILE="$HOME/.hermes/skills/productivity/systemprompt-manager/SKILL.md"
 
 if [ ! -f "$SOURCE_FILE" ]; then
-    echo "❌ Error: Source file $SOURCE_FILE not found."
-    exit 1
+  echo "❌ Error: Source file $SOURCE_FILE not found."
+  echo "   Please install the systemprompt-manager skill first."
+  exit 1
 fi
 
-# Determine OS Paths
-if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
-    BASE_HOME="$USERPROFILE"
-else
-    BASE_HOME="$HOME"
-fi
+# Extract principles section (skip YAML frontmatter and Hermes-specific header)
+# Copy everything from "# Machine Identity" onwards
+sed -n '/^# Machine Identity/,$ p' "$SOURCE_FILE" > /tmp/_systemprompt_temp.md
 
-# Define Target Files
-TARGETS=(
-    "$BASE_HOME/.gemini/GEMINI.md"
-    "$BASE_HOME/.copilot/copilot-instructions.md"
-    "$BASE_HOME/.claudecode/CLAUDE.md"
-    "$BASE_HOME/.agent/AGENT.md"
+# Define all 7 sync targets
+declare -A TARGETS=(
+  ["Copilot CLI"]="$HOME/.copilot/copilot-instructions.md"
+  ["Gemini CLI"]="$HOME/.gemini/GEMINI.md"
+  ["AI CLI"]="$HOME/.ai/GEMINI.md"
+  ["Antigravity"]="$HOME/.antigravity/system-prompt.md"
+  ["Claude Code"]="$HOME/.claude/CLAUDE.md"
+  ["Codex CLI"]="$HOME/.codex/AGENTS.md"
+  ["Cursor"]="$HOME/.cursorrules"
 )
 
-update_file() {
-    local file=$1
-    if [ ! -f "$file" ]; then
-        mkdir -p "$(dirname "$file")"
-        touch "$file"
+SUCCESS=0
+FAILED=0
+
+for tool in "${!TARGETS[@]}"; do
+  target="${TARGETS[$tool]}"
+  target_dir=$(dirname "$target")
+  
+  if mkdir -p "$target_dir" 2>/dev/null; then
+    if cp /tmp/_systemprompt_temp.md "$target" 2>/dev/null; then
+      echo "✅ $tool → $target"
+      ((SUCCESS++))
+    else
+      echo "❌ $tool → $target (write failed)"
+      ((FAILED++))
     fi
-
-    # Check if markers exist, if not, append them
-    if ! grep -q "$START_MARKER" "$file"; then
-        echo -e "\n$START_MARKER\n$END_MARKER" >> "$file"
-    fi
-
-    # Use a temporary file for the merge
-    local temp_file=$(mktemp)
-    
-    # Logic: Keep everything before START, inject SOURCE, Keep everything after END
-    sed -e "/$START_MARKER/,/$END_MARKER/ { /$START_MARKER/! { /$END_MARKER/!d; }; }" "$file" > "$temp_file"
-    
-    # Inject content
-    sed -i '' "/$START_MARKER/r $SOURCE_FILE" "$temp_file" 2>/dev/null || sed -i "/$START_MARKER/r $SOURCE_FILE" "$temp_file"
-
-    cp "$temp_file" "$file"
-    rm "$temp_file"
-    echo "✅ Blended: $file"
-}
-
-for target in "${TARGETS[@]}"; do
-    update_file "$target"
+  else
+    echo "⚠️  $tool → $target (mkdir failed)"
+    ((FAILED++))
+  fi
 done
 
-echo "🚀 All System Prompts Synchronized with Multi-CLI Support."
+rm -f /tmp/_systemprompt_temp.md
+
+echo ""
+echo "=============================="
+echo "📊 Sync Summary: $SUCCESS succeeded, $FAILED failed"
+echo "📁 Source: $SOURCE_FILE"
+echo "=============================="
