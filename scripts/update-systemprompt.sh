@@ -27,12 +27,12 @@ fi
 
 # Define all 7 sync targets
 declare -A TARGETS=(
-  ["Copilot CLI"]="$HOME/.copilot/copilot-instructions.md"
-  ["Gemini CLI"]="$HOME/.gemini/GEMINI.md"
-  ["AI CLI"]="$HOME/.ai/GEMINI.md"
+  ["Copilot_CLI"]="$HOME/.copilot/copilot-instructions.md"
+  ["Gemini_CLI"]="$HOME/.gemini/GEMINI.md"
+  ["AI_CLI"]="$HOME/.ai/GEMINI.md"
   ["Antigravity"]="$HOME/.antigravity/system-prompt.md"
-  ["Claude Code"]="$HOME/.claude/CLAUDE.md"
-  ["Codex CLI"]="$HOME/.codex/AGENTS.md"
+  ["Claude_Code"]="$HOME/.claude/CLAUDE.md"
+  ["Codex_CLI"]="$HOME/.codex/AGENTS.md"
   ["Cursor"]="$HOME/.cursorrules"
 )
 
