@@ -25,22 +25,24 @@ else
   sed -n '/^# Machine Identity/,$ p' "$SOURCE_FILE" > /tmp/_systemprompt_temp.md
 fi
 
-# Define all 7 sync targets
-declare -A TARGETS=(
-  ["Copilot_CLI"]="$HOME/.copilot/copilot-instructions.md"
-  ["Gemini_CLI"]="$HOME/.gemini/GEMINI.md"
-  ["AI_CLI"]="$HOME/.ai/GEMINI.md"
-  ["Antigravity"]="$HOME/.antigravity/system-prompt.md"
-  ["Claude_Code"]="$HOME/.claude/CLAUDE.md"
-  ["Codex_CLI"]="$HOME/.codex/AGENTS.md"
-  ["Cursor"]="$HOME/.cursorrules"
+# Define all 7 sync targets (Format: "Name|Path")
+TARGETS=(
+  "Copilot_CLI|$HOME/.copilot/copilot-instructions.md"
+  "Gemini_CLI|$HOME/.gemini/GEMINI.md"
+  "AI_CLI|$HOME/.ai/GEMINI.md"
+  "Antigravity|$HOME/.antigravity/system-prompt.md"
+  "Claude_Code|$HOME/.claude/CLAUDE.md"
+  "Codex_CLI|$HOME/.codex/AGENTS.md"
+  "Cursor|$HOME/.cursorrules"
 )
 
 SUCCESS=0
 FAILED=0
 
-for tool in "${!TARGETS[@]}"; do
-  target="${TARGETS[$tool]}"
+for item in "${TARGETS[@]}"; do
+  tool="${item%%|*}"
+  target="${item#*|}"
+  target_dir=$(dirname "$target")
   target_dir=$(dirname "$target")
   
   if mkdir -p "$target_dir" 2>/dev/null; then
