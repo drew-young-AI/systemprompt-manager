@@ -25,16 +25,15 @@ else
   sed -n '/^# Machine Identity/,$ p' "$SOURCE_FILE" > /tmp/_systemprompt_temp.md
 fi
 
-# Define all 8 "Native Brain" sync targets (Format: "Name|Path")
+# Define verified "Native Brain" sync targets (Format: "Name|Path")
+# Verified based on Handshake Audit of tool configuration mechanisms.
 TARGETS=(
-  "Copilot_CLI|$HOME/.copilot/copilot-instructions.md"
   "Gemini_CLI|$HOME/.gemini/GEMINI.md"
-  "Antigravity|$HOME/.antigravity/system-prompt.md"
-  "Claude_Code|$HOME/.claude/CLAUDE.md"
+  "Antigravity|$HOME/agents.md"
   "Codex_CLI|$HOME/.codex/AGENTS.md"
-  "Cursor|$HOME/.cursorrules"
-  "Amazon_Q|.amazonq/rules/project-rules.md"
-  "GH_Copilot|.github/copilot-instructions.md"
+  "Copilot_CLI|$HOME/.copilot/copilot-instructions.md"
+  "AI_CLI|$HOME/.ai/GEMINI.md"
+  "Agent_CLI|$HOME/.agent/AGENT.md"
 )
 
 SUCCESS=0
