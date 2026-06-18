@@ -25,7 +25,7 @@ else
   sed -n '/^# Machine Identity/,$ p' "$SOURCE_FILE" > /tmp/_systemprompt_temp.md
 fi
 
-# Define all 7 sync targets (Format: "Name|Path")
+# Define all 10 sync targets (Format: "Name|Path")
 TARGETS=(
   "Copilot_CLI|$HOME/.copilot/copilot-instructions.md"
   "Gemini_CLI|$HOME/.gemini/GEMINI.md"
@@ -34,6 +34,9 @@ TARGETS=(
   "Claude_Code|$HOME/.claude/CLAUDE.md"
   "Codex_CLI|$HOME/.codex/AGENTS.md"
   "Cursor|$HOME/.cursorrules"
+  "Amazon_Q|.amazonq/rules/project-rules.md"
+  "GH_Copilot|.github/copilot-instructions.md"
+  "Shell_GPT|$HOME/.config/shell_gpt/roles/engineering.json"
 )
 
 SUCCESS=0
