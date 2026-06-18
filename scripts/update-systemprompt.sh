@@ -3,17 +3,27 @@
 # Syncs system prompt to ALL 7 AI tools
 # Source: https://github.com/drew-young-AI/systemprompt-manager
 
-SOURCE_FILE="$HOME/.hermes/skills/productivity/systemprompt-manager/SKILL.md"
+# 優先從本地開發路徑讀取，否則從 Hermes 技能路徑讀取
+LOCAL_SOURCE="/Users/drew/Project/systemprompt-manager/skills/systemprompt.md"
+HERMES_SOURCE="$HOME/.hermes/skills/productivity/systemprompt-manager/SKILL.md"
 
-if [ ! -f "$SOURCE_FILE" ]; then
-  echo "❌ Error: Source file $SOURCE_FILE not found."
-  echo "   Please install the systemprompt-manager skill first."
+if [ -f "$LOCAL_SOURCE" ]; then
+  SOURCE_FILE="$LOCAL_SOURCE"
+elif [ -f "$HERMES_SOURCE" ]; then
+  SOURCE_FILE="$HERMES_SOURCE"
+else
+  echo "❌ Error: Source file not found in local path or Hermes skill path."
   exit 1
 fi
 
-# Extract principles section (skip YAML frontmatter and Hermes-specific header)
-# Copy everything from "# Machine Identity" onwards
-sed -n '/^# Machine Identity/,$ p' "$SOURCE_FILE" > /tmp/_systemprompt_temp.md
+# Extract principles section
+if [[ "$SOURCE_FILE" == *"systemprompt.md" ]]; then
+  # 本地檔案直接使用全部內容
+  cat "$SOURCE_FILE" > /tmp/_systemprompt_temp.md
+else
+  # Hermes SKILL.md 需要從 # Machine Identity 開始擷取
+  sed -n '/^# Machine Identity/,$ p' "$SOURCE_FILE" > /tmp/_systemprompt_temp.md
+fi
 
 # Define all 7 sync targets
 declare -A TARGETS=(
